@@ -58,88 +58,99 @@ function toss()
 function displayBoard()
 {
 local num=3
-for((i=1; i<=$num; i++))
-do
-  for((j=1; j<=$num; j++))
-  do
-    echo -n "* "
-  done
-  echo
-done
+       for((i=1; i<=$num; i++))
+       do
+         for((j=1; j<=$num; j++))
+         do
+         echo -n "* "
+         done
+       echo
+       done
 }
+
 
 function checkRow()
 {
-	for (( i=$TRUE; i<=$NUMBER_OF_ROWS; i++ ))
+	for (( i=1; i<=$NUMBER_OF_ROWS; i++ ))
 	do
-		if [ $value -eq $FALSE ]
-		then
-		j=$TRUE
-		if [ ${board[$i,$j]} != "." ] && [ ${board[$i,$j]} == ${board[$i,$(( $j+1 ))]} ] && [ ${board[$i,$(( $j+1 ))]} == ${board[$i,$(( $j+2 ))]} ]
-		then
-			value=$TRUE
-			checkWinner
-			break
-		fi
-		fi
+		for (( j=1; j<=$NUMBER_OF_COLUMNS; ))
+		do
+			if [ ${board[$i,$j]} != '.' ]
+			then
+				if [ ${board[$i,$j]} == ${board[$i,$(( j++ ))]} ]
+				then
+					flag=1
+					break
+				else
+					flag=0
+				fi
+			fi
+		break
+		done
 	done
+
+	echo $flag
 }
 
 function checkColumn()
 {
-        for (( i=$TRUE; i<=$NUMBER_OF_COLUMNS; i++ ))
+        for (( i=1; i<=$NUMBER_OF_COLUMNS; i++ ))
         do
-		if [ $value -eq $FALSE ]
-		then
-        	j=$TRUE
-                if [ ${board[$j,$i]} != "." ] && [ ${board[$j,$i]} == ${board[$(( $j+1 )),$i]} ] && [ ${board[$(( $j+1 )),$i]} == ${board[$(( $j+2 )),$i]} ]
-                then
-	                value=$TRUE
-			checkWinner
-			break
-                fi
-		fi
+                for (( j=1; j<=$NUMBER_OF_ROWS; ))
+                do
+                        if [ ${board[$i,$j]} != '.' ]
+                        then
+                                if [ ${board[$i,$j]} == ${board[$i,$(( j++ ))]} ]
+                                then
+                                        flag=1
+                                        break
+                                else
+                                        flag=0
+                                fi
+                        fi
+                break
+                done
         done
+
+        echo $flag
 }
 
 function checkDiagonal()
 {
-	if [ ${board[1,1]} != "." ] && [ ${board[1,1]} == ${board[2,2]} ] && [ ${board[2,2]} == ${board[3,3]} ]
+	if [ ${board[1]} == ${board[5]} ]
 	then
-		i=$TRUE
-		j=$TRUE
-		value=$TRUE
-		checkWinner
-	elif [ ${board[1,3]} != "." ] && [ ${board[1,3]} == ${board[2,2]} ] && [ ${board[2,2]} == ${board[3,1]} ]
+		if [ ${board[5]} == ${board[9]} ]
+		then
+			flag=1
+		fi
+
+	elif [ ${board[3]} == ${board[5]} ]
 	then
-		i=$TRUE
-		j=3
-		value=$TRUE
-		checkWinner
+		if [ ${board[5]} == ${board[7]} ]
+		then
+			flag=1
+		fi
+
+	else
+		flag=0
 	fi
+
+        echo $flag
 }
 
 function checkTie()
 {
-	tie=$FALSE
-	for (( i=$TRUE; i<=$NUMBER_OF_ROWS; i++ ))
+	local tie=1
+	for (( i=1; i<=$NUMBER_OF_ROWS; i++ ))
 	do
-		for (( j=$TRUE;j<=$NUMBER_OF_COLUMNS; j++ ))
+		for (( j=1;j<=$NUMBER_OF_COLUMNS; j++ ))
 		do
-			if [ ${board[$i,$j]} != '.' ]
+			if [ ${board[$i,$j]} == '.' ]
 			then
-				tie=$(( $tie+$TRUE ))
-				if [ $tie -eq $TOTAL_GRIDS ]
-				then
-					echo "TIE"
-					break
-				fi
+				tie=0
+				break
 			fi
 		done
-		if [ $tie -eq $TOTAL_GRIDS ]
-		then
-			break
-		fi
 	done
 }
 function checkWin()
@@ -171,7 +182,40 @@ function displayWinner()
 	fi
 }
 
-toss
+function setComputerSymbol()
+{
+	for (( i=1;i<=$NUMBER_OF_ROWS; i++ ))
+	do
+                for (( j=1; j<=$NUMBER_OF_COLUMNS; j++ ))
+                do
+                        if [ ${board[$i,$j]} != '.' ]
+                        then
+				${board[$i,$j]}=$computerSymbol
+				break
+                        fi
+                done
+        done
+}
+
+function setSymbolForWin()
+{
+	if [ $flag -eq 1 ]
+	then
+		setComputerSymbol
+	fi
+}
+
+function playForWin()
+{
+	checkRow
+	setSymbolForWin
+	checkColumn
+	setSymbolForWin
+	checkDiagonal
+	setSymbolForWin
+}
+
 displayBoard
-assignLetter
-displayWinner
+resetBoard
+toss
+playForWin
