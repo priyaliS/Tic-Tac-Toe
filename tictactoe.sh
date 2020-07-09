@@ -60,10 +60,10 @@ function displayBoard()
 local num=3
 	for((i=1; i<=$num; i++))
 	do
-	  for((j=1; j<=$num; j++))
-  	  do
-    	    echo -n "* "
-  	  done
+  	  for((j=1; j<=$num; j++))
+          do
+          echo -n "* "
+          done
         echo
        done
 }
@@ -234,7 +234,22 @@ function playForWin()
 	checkDiagonal
 	setSymbol
 }
+function occupyCorner()
+{
+	 for (( i=1; i<=$NUMBER_OF_ROWS; i=$(( $i+2 )) ))
+        do
+                for (( j=1; j<=$NUMBER_OF_COLUMNS; j=$(( $j+2 )) ))
+                do
+                        if [ ${board[$i,$j]} = '.' ]
+                        then
+				board[$i,$j]=$computerSymbol
+				break
+			fi
+		done
+	done
 
+}
 resetBoard
 toss
-playForWin
+occupyCorner
+displayBoard
