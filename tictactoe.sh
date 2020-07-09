@@ -33,9 +33,26 @@ function toss()
 	if [ $tossValue -eq $choice ]
 	then
 		echo "Player won the toss"
+		echo "FIRST TURN"
 	else
 		echo "Player lost the toss"
+		echo "SECOND TURN"
 	fi
 }
 
+function displayBoard()
+{
+local num=3
+for((i=1; i<=$num; i++))
+do
+  for((j=1; j<=$num; j++))
+  do
+    echo -n "* "
+  done
+  echo
+done
+}
+
+resetBoard
 toss
+displayBoard
