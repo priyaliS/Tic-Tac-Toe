@@ -1,42 +1,41 @@
-#!/bin/bash 
+#!/bin/bash
 
 echo "WELCOME TO TIC TAC TOE SIMULATION"
 
 TOTAL_GRIDS=9
 NUMBER_OF_ROWS=3
 NUMBER_OF_COLUMNS=3
-TRUE=1
-FALSE=0
 
-flag=$FALSE
-value=$FALSE
+flag=0
 
 declare -A board
 
 function resetBoard()
 {
-	for (( i=$TRUE; i<=$NUMBER_OF_ROWS; i++ ))
+	for (( i=1; i<=$NUMBER_OF_ROWS; i++ ))
 	do
-		for (( j=$TRUE; j<=$NUMBER_OF_COLUMNS; j++  ))
+		for (( j=1; j<=$NUMBER_OF_COLUMNS; j++  ))
 		do
 			board[$i,$j]='.'
 		done
 	done
 }
+
 function assignLetter()
 {
 	local letter=$(( RANDOM%2 ))
+
 	if [ $letter -eq 1 ]
 	then
-		playerSymbol=X
-		computerSymbol=O
+		playerOneSymbol=X
+		playerTwoSymbol=O
 	else
-		playerSymbol=O
-		computerSymbol=X
+		playerOneSymbol=O
+		playerTwoSymbol=X
 	fi
 
-	echo "Player Symbol is " $playerSymbol
-	echo "Player Symbol is " $computerSymbol
+	echo "Player Symbol is " $playerOneSymbol
+	echo "Computer Symbol is " $playerTwoSymbol
 }
 
 function toss()
@@ -58,15 +57,15 @@ function toss()
 
 function displayBoard()
 {
-    local num=3
-	for((i=1; i<=$num; i++))
-	do
-  	  for((j=1; j<=$num; j++))
-  	   do
-             echo -n "."
-           done
-             echo
-        done
+local num=3
+for((i=1; i<=$num; i++))
+do
+  for((j=1; j<=$num; j++))
+  do
+    echo -n "* "
+  done
+  echo
+done
 }
 
 function checkRow()
@@ -143,39 +142,36 @@ function checkTie()
 		fi
 	done
 }
-
-
-function isWinner()
+function checkWin()
 {
-	position=1
-	while [ $position -le $TOTAL_GRIDS ]
-	do
-		resetBoard
-		toss
-		displayBoard
-		flag1=$(checkRow)
-		flag2=$(checkColumn)
-		flag3=$(checkDiagonal)
-
-		if [ $flag1 -eq 0 ]
-		then
-			echo "WIN"
-			exit
-
-		elif [ $flag2 -eq 0 ]
-		then
-			echo "WIN"
-			exit
-
-		elif [ $flag3 -eq 0 ]
-		then
-			echo "WIN"
-			exit
-		fi
-
-		position=$(( $position+1 ))
-	done
+	if [ $(checkRow) -eq 1 ]
+	then
+		echo $(checkRow)
+	elif [ $(checkColumn) -eq 1 ]
+	then
+		echo $(checkColumn)
+	elif [ $(checkDiagonal) -eq 1 ]
+	then
+		echo $(checkDiagonal)
+	else
+		echo
+	fi
 }
 
+function displayWinner()
+{
+	if [ $(checkWin) -eq 1 ]
+	then
+		echo "WON"
+	elif [ $(checkTie) -eq 1 ]
+	then
+		echo "TIE"
+	else
+		echo "Next Turn"
+	fi
+}
 
-isWinner
+toss
+displayBoard
+assignLetter
+displayWinner
