@@ -1,4 +1,5 @@
 #!/bin/bash
+
 echo "WELCOME TO TIC TAC TOE SIMULATION"
 #Constants
 TOTAL_GRIDS=9
