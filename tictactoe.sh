@@ -1,5 +1,6 @@
 #!/bin/bash
 echo "WELCOME TO TIC TAC TOE SIMULATION"
+
 #Constants
 TOTAL_GRIDS=9
 NUMBER_OF_ROWS=3
@@ -67,7 +68,6 @@ local board[i,j]=3
           done
         echo
        done
-
 }
 
 function changeTurn()
