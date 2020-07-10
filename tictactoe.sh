@@ -21,7 +21,6 @@ function resetBoard()
 		done
 	done
 }
-
 function assignLetter()
 {
 	local letter=$(( RANDOM%2 ))
