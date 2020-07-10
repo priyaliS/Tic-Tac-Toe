@@ -59,15 +59,16 @@ function toss()
 
 function displayBoard()
 {
-local num=3
-	for((i=1; i<=$num; i++))
-	do
-  	  for((j=1; j<=$num; j++))
+local board[i,j]=3
+        for((i=1; i<=${board[i,j]}; i++))
+        do
+          for((j=1; j<=${board[i,j]}; j++))
           do
           echo -n "| . |"
           done
-        echo 
+        echo
        done
+
 }
 
 function changeTurn()
